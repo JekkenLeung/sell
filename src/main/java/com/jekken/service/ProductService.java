@@ -2,6 +2,7 @@ package com.jekken.service;
 
 import com.jekken.dto.CartDTO;
 import com.jekken.pojo.ProductInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public interface ProductService {
     /**
      * 查询所有在家商品
      */
-    List<ProductInfo> findAll(Pageable pageable);
+    List<ProductInfo> findUpAll();
+
+    Page<ProductInfo> findAll(Pageable pageable);
 
     ProductInfo save(ProductInfo productInfo);
 

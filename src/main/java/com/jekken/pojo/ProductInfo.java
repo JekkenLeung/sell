@@ -1,6 +1,8 @@
 package com.jekken.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jekken.enums.ProductStatusEnum;
+import com.jekken.utils.EnumUtil;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -51,6 +53,29 @@ public class ProductInfo implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    @JsonIgnore
+    public ProductStatusEnum getProductStatusEnum(){
+        return EnumUtil.getByCode(productStatus,ProductStatusEnum.class);
+    }
+
+    /**
+     * 拼接图片链接
+     */
+    public ProductInfo addImageHost(String host){
+        if (productIcon.startsWith("//")||productIcon.startsWith("http")){
+            return this;
+        }
+        if (!host.startsWith("http")){
+            host = "//" +host;
+        }
+        if (!host.endsWith("/")){
+            host = host + "/";
+        }
+        productIcon = host+productIcon;
+        return this;
+    }
+
 
 
 }

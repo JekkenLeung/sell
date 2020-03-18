@@ -8,3 +8,41 @@ spring:
     show-sql: true
   jackson:
     default-property-inclusion: non_null
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+wechat:
+  #公众号账号、授权
+  mpAppId:
+  mpAppSecret:
+
+  #开放平台、卖家扫码登陆
+  openAppId:
+  openAppSecret:
+
+  #支付/商户号
+  mchId:
+  mchKey:
+  #退款证书
+  keyPath:
+  notifyUrl:
+  templateId:
+    orderStatus:
+
+projectUrl:
+  wechatMpAuthorize:
+  whchatOpenAuthorize:
+  sell:
+
+
+upyun:
+  bucketName:
+  userName:
+  password:
+  imageHost:
+server:
+  port: 9002
+  servlet:
+    context-path: /sell
