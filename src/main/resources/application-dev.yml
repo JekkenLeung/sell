@@ -10,8 +10,9 @@ spring:
     default-property-inclusion: non_null
 
   redis:
-    host: 127.0.0.1
+    host: 101.132.158.126
     port: 6379
+    password: 666666
 
 wechat:
   #公众号账号、授权
