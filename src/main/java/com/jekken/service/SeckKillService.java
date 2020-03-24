@@ -9,7 +9,7 @@ public interface SeckKillService {
     /**
      * 查询秒杀活动特价商品的信息
      */
-    String querySeckillProductInfo(String productId);
+    String querySecKillProductInfo(String productId);
 
     /**
      * 模拟不同用户秒杀同意商品的请求
