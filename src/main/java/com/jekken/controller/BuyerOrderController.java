@@ -78,6 +78,24 @@ public class BuyerOrderController {
         return ResultVOUtil.success(orderDTOPage.getContent());
     }
 
+    /**
+     * 订单详情
+     */
+    @GetMapping("/detail")
+    public ResultVO<OrderDTO> detail(@RequestParam("openid") String openid,
+                                     @RequestParam("orderId") String orderId){
+        OrderDTO orderDTO = buyerService.findOrderOne(openid, orderId);
+        return ResultVOUtil.success(orderDTO);
+    }
 
+    /**
+     * 取消订单
+     */
+    @PostMapping("/cancel")
+    public ResultVO cancel(@RequestParam("openid") String openid,
+                           @RequestParam("orderId") String orderId){
+        buyerService.cancelOrder(openid,orderId);
+        return ResultVOUtil.success();
+    }
 
 }

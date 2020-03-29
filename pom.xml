@@ -82,6 +82,13 @@
             <artifactId>gson</artifactId>
         </dependency>
 
+        <!--图片上传-->
+        <dependency>
+            <groupId>com.upyun</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
     </dependencies>
 
 
