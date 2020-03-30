@@ -2,7 +2,6 @@ package com.jekken.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import sun.plugin2.message.Message;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -33,7 +32,7 @@ public class WebSocket {
     }
 
     @OnClose
-    public void onClose(String message){
+    public void onClose(){
         webSocketSet.remove(this);
         log.info("【websocket消息】连接断开,message={}",webSocketSet.size());
     }

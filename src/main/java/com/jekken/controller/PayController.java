@@ -4,7 +4,7 @@ import com.jekken.dto.OrderDTO;
 import com.jekken.enums.ResultEnum;
 import com.jekken.exception.SellException;
 import com.jekken.service.OrderService;
-import com.jekken.service.PayService;
+//import com.jekken.service.PayService;
 import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,8 +23,8 @@ public class PayController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private PayService payService;
+//    @Autowired
+//    private PayService payService;
 
     @GetMapping("/create")
     public ModelAndView create(@RequestParam("orderId") String orderId,
@@ -37,9 +37,9 @@ public class PayController {
         }
 
         //2.发起支付
-        PayResponse payResponse = payService.create(orderDTO);
+//        PayResponse payResponse = payService.create(orderDTO);
 
-        map.put("payResponse",payResponse);
+//        map.put("payResponse",payResponse);
         map.put("returnUrl",returnUrl);
 
         return new ModelAndView("pay/create",map);
@@ -51,7 +51,7 @@ public class PayController {
      */
     @PostMapping("/notify")
     public ModelAndView notify(@RequestBody String notifyData){
-        payService.notify(notifyData);
+//        payService.notify(notifyData);
 
         //返回微信处理结果
         return new ModelAndView("pay/success");

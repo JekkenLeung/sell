@@ -14,7 +14,7 @@ import com.jekken.pojo.OrderDetail;
 import com.jekken.pojo.OrderMaster;
 import com.jekken.pojo.ProductInfo;
 import com.jekken.service.OrderService;
-import com.jekken.service.PayService;
+//import com.jekken.service.PayService;
 import com.jekken.service.ProductService;
 import com.jekken.service.PushMessageService;
 import com.jekken.utils.KeyUtil;
@@ -50,8 +50,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMasterDao orderMasterDao;
 
-    @Autowired
-    private PayService payService;
+//    @Autowired
+//    private PayService payService;
 
     @Autowired
     private PushMessageService pushMessageService;
@@ -160,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
 
         //如果已支付,需要退款
         if (orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())){
-            payService.refund(orderDTO);
+//            payService.refund(orderDTO);
         }
 
         return orderDTO;

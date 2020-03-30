@@ -3,7 +3,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 666666
-    url: jdbc:mysql://101.132.158.126/sell?characterEncoding=utf-8
+    url: jdbc:mysql://101.132.158.126/sell?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 10
+      max-lifetime: 30000
+      connection-test-query: SELECT 1
   jpa:
     show-sql: true
   jackson:
@@ -13,11 +18,12 @@ spring:
     host: 101.132.158.126
     port: 6379
     password: 666666
-
+#  freemarker:
+#    template-loader-path: classpath:/templates/
 wechat:
   #公众号账号、授权
-  mpAppId:
-  mpAppSecret:
+  mpAppId: wx0d1a8e1eab67ab40
+  mpAppSecret: c3e37d623c0c76e5546ece942e9b6be4
 
   #开放平台、卖家扫码登陆
   openAppId:
