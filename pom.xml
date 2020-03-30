@@ -98,7 +98,7 @@
 
 
     <build>
-        <finalName>sell_V1.0</finalName>
+        <finalName>sell_V1.1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
