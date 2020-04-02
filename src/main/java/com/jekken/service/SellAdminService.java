@@ -48,6 +48,6 @@ public interface SellAdminService {
      */
     int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam);
 
-    
+
 
 }
