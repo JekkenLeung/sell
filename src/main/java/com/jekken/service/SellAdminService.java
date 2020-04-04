@@ -3,6 +3,8 @@ package com.jekken.service;
 import com.jekken.dto.AdminParam;
 import com.jekken.dto.UpdateAdminPasswordParam;
 import com.jekken.pojo.SellAdmin;
+import com.jekken.pojo.SellResource;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -48,6 +50,17 @@ public interface SellAdminService {
      */
     int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam);
 
+    /**
+     * 获取用户信息
+     * @param username
+     * @return
+     */
+    UserDetails loadUserByUsername(String username);
+
+    /**
+     * 获取指定用用户可访问的资源
+     */
+    List<SellResource> getResourceList(long adminId);
 
 
 }

@@ -1,5 +1,7 @@
 package com.jekken.utils;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,6 +29,8 @@ public class JwtTokenUtil {
     private Long expiration;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Value("${jwt.refreshTime}")
+    private Integer refreshTime;
 
     /**
      * 生成token
@@ -104,8 +108,47 @@ public class JwtTokenUtil {
         return generateToken(claims);
     }
 
-    
+    /**
+     * 判断token在指定时间内是否刷新过
+     */
+    private boolean tokenRefreshJustBefore(String token,int time){
+        Claims claims = getClaimsFromToken(token);
+        Date created = claims.get(CLAIM_KEY_CREATED, Date.class);
+        Date refreshDate = new Date();
+        //刷新时间在创建时间的指定时间内
+        if (refreshDate.after(created)&&refreshDate.before(DateUtil.offsetSecond(created,time))){
+            return true;
+        }
+        return false;
+    }
 
-
+    /**
+     * 刷新token
+     */
+    public String refreshHeadToken(String oldToken){
+        if (StrUtil.isEmpty(oldToken)){
+            return null;
+        }
+        String token = oldToken.substring(tokenHead.length());
+        if (StrUtil.isEmpty(token)){
+            return null;
+        }
+        //token检验不通过
+        Claims claims = getClaimsFromToken(token);
+        if (claims ==null){
+            return null;
+        }
+        //如果token已经过期,不支持刷新
+        if (isTokenExpired(token)){
+            return null;
+        }
+        //如果token在指定时间内刷新过,返回原token
+        if (tokenRefreshJustBefore(token,refreshTime)){
+            return token;
+        }else {
+            claims.put(CLAIM_KEY_CREATED,new Date());
+            return generateToken(claims);
+        }
+    }
 
 }

@@ -2,13 +2,20 @@ package com.jekken.service.impl;
 
 import com.jekken.dto.AdminParam;
 import com.jekken.dto.UpdateAdminPasswordParam;
+import com.jekken.mapper.SellAdminLoginLogMapper;
 import com.jekken.mapper.SellAdminMapper;
+import com.jekken.mapper.SellAdminPermissionRelationMapper;
+import com.jekken.mapper.SellAdminRoleRelationMapper;
 import com.jekken.pojo.SellAdmin;
 import com.jekken.pojo.SellAdminExample;
+import com.jekken.pojo.SellResource;
 import com.jekken.service.SellAdminService;
+import com.jekken.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +31,23 @@ import java.util.List;
 public class SellAdminServiceImpl implements SellAdminService {
 
     @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private SellAdminMapper sellAdminMapper;
+
+    @Autowired
+    private SellAdminRoleRelationMapper adminRoleRelationMapper;
+
+    @Autowired
+    private SellAdminPermissionRelationMapper adminPermissionRelationMapper;
+
+    @Autowired
+    private SellAdminLoginLogMapper loginLogMapper;
+
 
 
 
@@ -66,7 +86,14 @@ public class SellAdminServiceImpl implements SellAdminService {
 
     @Override
     public String login(String username, String password) {
+        String token = null;
+        //密码客户端加密后传递
+        try {
+            UserDetails userDetails = loadUserByUsername(username);
 
+        }catch (AuthenticationException e){
+            log.warn("【登录】登录异常:{}",e.getMessage());
+        }
 
         return null;
     }
@@ -89,5 +116,23 @@ public class SellAdminServiceImpl implements SellAdminService {
     @Override
     public int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam) {
         return 0;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        //获取用户信息
+        SellAdmin admin=getAdminByUsername(username);
+
+
+
+        return null;
+    }
+
+    @Override
+    public List<SellResource> getResourceList(long adminId) {
+
+
+
+        return null;
     }
 }
