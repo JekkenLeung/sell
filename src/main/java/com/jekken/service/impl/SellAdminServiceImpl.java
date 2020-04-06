@@ -1,5 +1,6 @@
 package com.jekken.service.impl;
 
+import com.jekken.dao.SellAdminRoleRelationDao;
 import com.jekken.dto.AdminParam;
 import com.jekken.dto.UpdateAdminPasswordParam;
 import com.jekken.mapper.SellAdminLoginLogMapper;
@@ -47,6 +48,9 @@ public class SellAdminServiceImpl implements SellAdminService {
 
     @Autowired
     private SellAdminLoginLogMapper loginLogMapper;
+
+    @Autowired
+    private SellAdminRoleRelationDao adminRoleRelationDao;
 
 
 
@@ -122,7 +126,9 @@ public class SellAdminServiceImpl implements SellAdminService {
     public UserDetails loadUserByUsername(String username) {
         //获取用户信息
         SellAdmin admin=getAdminByUsername(username);
-
+        if (admin !=null){
+            List<SellResource> resourceList = getResourceList(admin.getId());
+        }
 
 
         return null;
@@ -131,8 +137,8 @@ public class SellAdminServiceImpl implements SellAdminService {
     @Override
     public List<SellResource> getResourceList(long adminId) {
 
+        List<SellResource> resourceList = adminRoleRelationDao.getResourceList(adminId);
 
-
-        return null;
+        return resourceList;
     }
 }

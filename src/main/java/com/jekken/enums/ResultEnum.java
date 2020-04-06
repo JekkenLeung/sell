@@ -44,7 +44,11 @@ public enum ResultEnum {
 
     LOGIN_FAIL(25,"登录失败，登录信息不正确"),
 
-    LOGOUT_SUCCESS(26,"登出成功")
+    LOGOUT_SUCCESS(26,"登出成功"),
+
+    PERMISSION_DENIED(27,"没有权限"),
+
+    UN_AUTHORIZED(28,"用户未登录或token已过期")
 
     ;
 

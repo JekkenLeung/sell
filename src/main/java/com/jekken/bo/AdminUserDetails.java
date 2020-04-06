@@ -1,9 +1,14 @@
 package com.jekken.bo;
 
+import com.jekken.pojo.SellAdmin;
+import com.jekken.pojo.SellResource;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * SpringSecurity用户详情
@@ -11,38 +16,47 @@ import java.util.Collection;
  * 2020/4/4 18:50
  */
 public class AdminUserDetails implements UserDetails {
+    private SellAdmin sellAdmin;
+    private List<SellResource> resourceList;
+
+    public AdminUserDetails(SellAdmin sellAdmin, List<SellResource> resourceList) {
+        this.sellAdmin = sellAdmin;
+        this.resourceList = resourceList;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        //返回当前用户的角色
+        return resourceList.stream().map(role->new SimpleGrantedAuthority(role.getId()+":"+role.getName())).collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return sellAdmin.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return sellAdmin.getUsername();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return sellAdmin.getStatus().equals(1);
     }
 }

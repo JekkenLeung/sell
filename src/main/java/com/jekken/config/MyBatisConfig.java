@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * 2020/4/1 22:42
  */
 @Configuration
-@MapperScan({"com.jekken.mapper"})
+@MapperScan({"com.jekken.mapper","com.jekken.dao"})
 public class MyBatisConfig {
 }

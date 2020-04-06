@@ -11,3 +11,10 @@ jwt:
   expiration: 604800 #JWT的超期限时间(60*60*24*7)
   tokenHead: Bearer  #JWT负载中拿到开头
   refreshTime: 1800 #JWT刷新时间
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /admin/login
+      - /admin/register
+
