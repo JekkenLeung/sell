@@ -1,5 +1,6 @@
 package com.jekken.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.jekken.bo.AdminUserDetails;
 import com.jekken.dao.SellAdminRoleRelationDao;
 import com.jekken.dto.AdminParam;
@@ -139,6 +140,7 @@ public class SellAdminServiceImpl implements SellAdminService {
 
     @Override
     public List<SellAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
+        PageHelper.startPage(pageNum,pageSize);
 
 
 
