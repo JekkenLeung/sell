@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: dev
+
+  main:
+    allow-bean-definition-overriding: true
 mybatis:
   mapper-location:
     - classpath:mapper/*.xml
@@ -17,4 +20,6 @@ secure:
     urls: #安全路径白名单
       - /admin/login
       - /admin/register
+
+
 
