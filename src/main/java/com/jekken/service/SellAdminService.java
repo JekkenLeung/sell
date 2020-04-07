@@ -30,10 +30,6 @@ public interface SellAdminService {
      */
     String login(String username,String password);
 
-    /**
-     * 根据id获取用户
-     */
-    SellAdmin getAdminById(Long id);
 
     /**
      * 根据用户名或昵称分页查询用户

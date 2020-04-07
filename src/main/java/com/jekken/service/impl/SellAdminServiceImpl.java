@@ -1,5 +1,6 @@
 package com.jekken.service.impl;
 
+import com.jekken.bo.AdminUserDetails;
 import com.jekken.dao.SellAdminRoleRelationDao;
 import com.jekken.dto.AdminParam;
 import com.jekken.dto.UpdateAdminPasswordParam;
@@ -9,17 +10,25 @@ import com.jekken.mapper.SellAdminPermissionRelationMapper;
 import com.jekken.mapper.SellAdminRoleRelationMapper;
 import com.jekken.pojo.SellAdmin;
 import com.jekken.pojo.SellAdminExample;
+import com.jekken.pojo.SellAdminLoginLog;
 import com.jekken.pojo.SellResource;
 import com.jekken.service.SellAdminService;
 import com.jekken.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -94,21 +103,45 @@ public class SellAdminServiceImpl implements SellAdminService {
         //密码客户端加密后传递
         try {
             UserDetails userDetails = loadUserByUsername(username);
-
+            if (!passwordEncoder.matches(password,userDetails.getPassword())){
+                throw new BadCredentialsException("密码不正确");
+            }
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            token = jwtTokenUtil.generateToken(userDetails);
+            insertLoginLog(username);
         }catch (AuthenticationException e){
             log.warn("【登录】登录异常:{}",e.getMessage());
         }
-
-        return null;
+        return token;
     }
 
-    @Override
-    public SellAdmin getAdminById(Long id) {
-        return null;
+    /**
+     * 添加登录记录
+     * @param username
+     */
+    private void insertLoginLog(String username){
+        SellAdmin admin = getAdminByUsername(username);
+        if (admin==null){
+            return;
+        }
+        SellAdminLoginLog loginLog = new SellAdminLoginLog();
+        loginLog.setAdminId(admin.getId());
+        loginLog.setCreateTime(new Date());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        loginLog.setIp(request.getRemoteAddr());
+        loginLogMapper.insert(loginLog);
+
     }
+
+
 
     @Override
     public List<SellAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
+
+
+
         return null;
     }
 
@@ -128,10 +161,9 @@ public class SellAdminServiceImpl implements SellAdminService {
         SellAdmin admin=getAdminByUsername(username);
         if (admin !=null){
             List<SellResource> resourceList = getResourceList(admin.getId());
+            return new AdminUserDetails(admin,resourceList);
         }
-
-
-        return null;
+        throw new UsernameNotFoundException("用户名或密码错误");
     }
 
     @Override
