@@ -6,7 +6,8 @@ spring:
     allow-bean-definition-overriding: true
 mybatis:
   mapper-location:
-    - classpath:mapper/*.xml
+    - classpath:com/jekken/**/*.xml
+
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头

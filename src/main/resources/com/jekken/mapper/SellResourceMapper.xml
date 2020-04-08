@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jekken.mbg.mapper.SellRolePermissionRelationMapper">
-  <resultMap id="BaseResultMap" type="com.jekken.mbg.model.SellRolePermissionRelation">
+<mapper namespace="com.jekken.mapper.SellResourceMapper">
+  <resultMap id="BaseResultMap" type="com.jekken.pojo.SellResource">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="role_id" jdbcType="BIGINT" property="roleId" />
-    <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +68,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, role_id, permission_id
+    id, create_time, name, url, description, category_id
   </sql>
-  <select id="selectByExample" parameterType="com.jekken.mbg.model.SellRolePermissionRelationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jekken.pojo.SellResourceExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from sell_role_permission_relation
+    from sell_resource
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,65 +87,94 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from sell_role_permission_relation
+    from sell_resource
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sell_role_permission_relation
+    delete from sell_resource
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jekken.mbg.model.SellRolePermissionRelationExample">
-    delete from sell_role_permission_relation
+  <delete id="deleteByExample" parameterType="com.jekken.pojo.SellResourceExample">
+    delete from sell_resource
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jekken.mbg.model.SellRolePermissionRelation">
+  <insert id="insert" parameterType="com.jekken.pojo.SellResource">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sell_role_permission_relation (role_id, permission_id)
-    values (#{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT})
+    insert into sell_resource (create_time, name, url, 
+      description, category_id)
+    values (#{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jekken.mbg.model.SellRolePermissionRelation">
+  <insert id="insertSelective" parameterType="com.jekken.pojo.SellResource">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sell_role_permission_relation
+    insert into sell_resource
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="roleId != null">
-        role_id,
+      <if test="createTime != null">
+        create_time,
       </if>
-      <if test="permissionId != null">
-        permission_id,
+      <if test="name != null">
+        name,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="categoryId != null">
+        category_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="roleId != null">
-        #{roleId,jdbcType=BIGINT},
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="permissionId != null">
-        #{permissionId,jdbcType=BIGINT},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jekken.mbg.model.SellRolePermissionRelationExample" resultType="java.lang.Integer">
-    select count(*) from sell_role_permission_relation
+  <select id="countByExample" parameterType="com.jekken.pojo.SellResourceExample" resultType="java.lang.Integer">
+    select count(*) from sell_resource
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update sell_role_permission_relation
+    update sell_resource
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=BIGINT},
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.permissionId != null">
-        permission_id = #{record.permissionId,jdbcType=BIGINT},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryId != null">
+        category_id = #{record.categoryId,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -150,30 +182,45 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update sell_role_permission_relation
+    update sell_resource
     set id = #{record.id,jdbcType=BIGINT},
-      role_id = #{record.roleId,jdbcType=BIGINT},
-      permission_id = #{record.permissionId,jdbcType=BIGINT}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      name = #{record.name,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jekken.mbg.model.SellRolePermissionRelation">
-    update sell_role_permission_relation
+  <update id="updateByPrimaryKeySelective" parameterType="com.jekken.pojo.SellResource">
+    update sell_resource
     <set>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=BIGINT},
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="permissionId != null">
-        permission_id = #{permissionId,jdbcType=BIGINT},
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jekken.mbg.model.SellRolePermissionRelation">
-    update sell_role_permission_relation
-    set role_id = #{roleId,jdbcType=BIGINT},
-      permission_id = #{permissionId,jdbcType=BIGINT}
+  <update id="updateByPrimaryKey" parameterType="com.jekken.pojo.SellResource">
+    update sell_resource
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
