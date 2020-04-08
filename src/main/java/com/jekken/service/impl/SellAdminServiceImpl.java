@@ -1,5 +1,7 @@
 package com.jekken.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.jekken.bo.AdminUserDetails;
 import com.jekken.dao.SellAdminRoleRelationDao;
@@ -26,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -141,20 +144,55 @@ public class SellAdminServiceImpl implements SellAdminService {
     @Override
     public List<SellAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
         PageHelper.startPage(pageNum,pageSize);
-
-
-
-        return null;
+        SellAdminExample example = new SellAdminExample();
+        SellAdminExample.Criteria criteria = example.createCriteria();
+        if (!StringUtils.isEmpty(keyword)){
+            criteria.andUsernameLike("%"+keyword+"%");
+            example.or(example.createCriteria().andNickNameLike("%"+keyword+"%"));
+        }
+        return sellAdminMapper.selectByExample(example);
     }
 
     @Override
     public int update(Long id, SellAdmin admin) {
-        return 0;
+       admin.setId(id);
+       SellAdmin rawAdmin = sellAdminMapper.selectByPrimaryKey(id);
+       if (rawAdmin.getPassword().equals(admin.getPassword())){
+           //与原密码相同不需要修改
+           admin.setPassword(null);
+       }else {
+           //与原密码不同需要加密修改
+           if (StrUtil.isEmpty(admin.getPassword())){
+               admin.setPassword(null);
+           }else {
+               admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+           }
+       }
+
+       int count = sellAdminMapper.updateByPrimaryKeySelective(admin);
+
+        return count;
     }
 
     @Override
     public int updatePassword(UpdateAdminPasswordParam updateAdminPasswordParam) {
-        return 0;
+        if (StrUtil.isEmpty(updateAdminPasswordParam.getUsername())||StrUtil.isEmpty(updateAdminPasswordParam.getOldPassword())||StrUtil.isEmpty(updateAdminPasswordParam.getNewPassword())){
+
+            return -1;
+        }
+        SellAdminExample example = new SellAdminExample();
+        example.createCriteria().andUsernameEqualTo(updateAdminPasswordParam.getUsername());
+        List<SellAdmin> adminList = sellAdminMapper.selectByExample(example);
+        if (CollUtil.isEmpty(adminList)){
+            return -2;
+        }
+        SellAdmin sellAdmin = adminList.get(0);
+        if (!passwordEncoder.matches(updateAdminPasswordParam.getOldPassword(),sellAdmin.getPassword())){
+            return -3;
+        }
+        sellAdmin.setPassword(passwordEncoder.encode(updateAdminPasswordParam.getNewPassword()));
+        sellAdminMapper.updateByPrimaryKey(sellAdmin);
+        return 1;
     }
 
     @Override
