@@ -24,6 +24,7 @@ secure:
       - /aaa
       - /bbb
       - /ccc
+      - /ccc
 
 
 
