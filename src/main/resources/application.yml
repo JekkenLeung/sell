@@ -23,6 +23,7 @@ secure:
       - /admin/register
       - /aaa
       - /bbb
+      - /ccc
 
 
 
