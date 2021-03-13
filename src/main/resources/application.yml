@@ -21,6 +21,6 @@ secure:
     urls: #安全路径白名单
       - /admin/login
       - /admin/register
-
+      -/aaa
 
 
